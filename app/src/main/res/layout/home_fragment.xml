@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="viewModel"
+            type="com.example.musicplayer.ui.home.HomeViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        >
+
+        <RelativeLayout
+            android:id="@+id/homeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isInternetAvailable ? View.GONE : View.VISIBLE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="150dp"
+                android:text="@string/offline"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="200dp"
+                android:text="@string/offline_interent_connection"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/homeFragTapToRefresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="250dp"
+                android:background="@drawable/rounded_button"
+                android:onClick="@{() -> viewModel.refresh(true)}"
+                android:padding="15dp"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:text="@string/offline_tap_to_refresh"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <com.example.musicplayer.ui.ScrollChildSwipeRefreshLayout
+            android:id="@+id/homeSwipeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isInternetAvailable ? View.VISIBLE : View.GONE}"
+            app:onRefreshListener="@{() -> viewModel.refresh(true)}"
+            app:refreshing="@{viewModel.dataLoading}">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/homeToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/homeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:gravity="start"
+                        android:text="@string/discover"
+                        android:textColor="@color/white"
+                        android:textSize="35sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@drawable/rounded_search"
+                        android:hint="@string/search"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
+                        android:drawableStart="@drawable/ic_search_white"
+                        android:layout_margin="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingStart="8dp"
+                        style="@style/AppThemeNoActionBar2"
+                        android:singleLine="true"
+                        app:searchResult="@{(x) -> viewModel.onSearchTextChanged(x)}" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/homeFragProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:theme="@style/OrangeAcccent"
+                    android:visibility="invisible" />
+
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/homeSearchText"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_centerHorizontal="true"-->
+                <!--                    android:layout_centerVertical="true"-->
+                <!--                    android:text="@string/search_something"-->
+                <!--                    android:textColor="@color/text_grey"-->
+                <!--                    android:textSize="18sp"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    android:visibility="@{viewModel.isSearchEmpty ? View.VISIBLE : View.GONE}" />-->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeFragRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/homeToolbar"
+                    android:padding="8dp"
+                    android:background="@color/black"
+                    app:items="@{viewModel.items}" />
+
+            </RelativeLayout>
+
+        </com.example.musicplayer.ui.ScrollChildSwipeRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
