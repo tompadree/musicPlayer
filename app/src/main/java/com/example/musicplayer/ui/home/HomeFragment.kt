@@ -6,13 +6,14 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.musicplayer.R
 import com.example.musicplayer.databinding.HomeFragmentBinding
 import com.example.musicplayer.ui.BindingFragment
 import com.example.musicplayer.utils.observe
 import kotlinx.android.synthetic.main.home_fragment.*
 
-class HomeFragment : BindingFragment<HomeFragmentBinding>() {
+class HomeFragment : BindingFragment<HomeFragmentBinding>(), SwipeRefreshLayout.OnRefreshListener{
 
     override val layoutId = R.layout.home_fragment
 
@@ -41,12 +42,16 @@ class HomeFragment : BindingFragment<HomeFragmentBinding>() {
         viewModel.refresh(true)
     }
 
+    override fun onRefresh() {
+        viewModel.refresh(true)
+    }
+
     private fun setupObservers() {
         observeError(viewModel.error)
 
         viewModel.isDataLoadingError.observe(this) {
             it?.let {
-                homeSwipeLayout.isEnabled = it
+                homeSwipeLayout.isEnabled = !it
                 homeSwipeLayout.isRefreshing = it
             }
         }
