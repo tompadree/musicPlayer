@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.musicplayer.R
 import com.example.musicplayer.data.models.SessionObject
 
 /**
@@ -57,6 +58,7 @@ fun setGif(imageView: ImageView, url: String) {
         Glide
                 .with(imageView.context)
                 .load(url)
+                .placeholder(R.drawable.rounded_search)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(80)))
                 .into(imageView)
         imageView.clearFocus()
